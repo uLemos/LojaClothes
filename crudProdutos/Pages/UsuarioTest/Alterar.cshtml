@@ -1,0 +1,111 @@
+﻿@page "{id:int?}" //Url mais acessível ao entendimento
+@model crudProdutos.Pages.UsuarioTest.AlterarModel
+
+@{
+    ViewData["titulo"] = "Alteração de Usuário";
+}
+
+
+<main class="container mt-3">
+    <div class="row justify-content-center">
+        <div class="col-sm-12">
+            <h1>@ViewData["titulo"]</h1>
+            <hr />
+            <form method="post" class="mt-3"> 
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Usuario.IdUsuario" />
+                <fieldset>
+                    <legend>Dados Pessoais</legend>
+                    <div class="form-group">
+                        <label asp-for="Usuario.Nome" class="control-label"></label>
+                        <input asp-for="Usuario.Nome" class="form-control col-6" />
+                        <span asp-validation-for="Usuario.Nome" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Usuario.CPF" class="control-label"></label>
+                        <span>(Somente números)</span>
+                        <span class="font-weight-bold d-block">@Html.DisplayFor(modelItem => modelItem.Usuario.CPF)</span>
+                        <span asp-validation-for="Usuario.CPF" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Usuario.DataNascimento" class="control-label"></label>
+                        <input asp-for="Usuario.DataNascimento" class="form-control col-2" />
+                        <span asp-validation-for="Usuario.DataNascimento" class="text-danger"></span>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>Contatos</legend>
+                    <div class="form-group">
+                        <label asp-for="Usuario.Email" class="control-label"></label>
+                        <span class="text-dark d-block">@Html.DisplayFor(modelItem => modelItem.Usuario.Email)</span>
+                        <span asp-validation-for="Usuario.Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Usuario.Telefone" class="control-label"></label>
+                        <span>(com DDD, somente números)</span>
+                        <input asp-for="Usuario.Telefone" class="form-control col-2" placeholder="400289220157" />
+                        <span asp-validation-for="Usuario.Telefone" class="text-danger"></span>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>Endereço</legend>
+                    <div class="form-group">
+                        <label asp-for="Usuario.Endereco.CEP" class="control-label"></label>
+                        <span>(Somente números)</span>
+                        <div class="input-group">
+                            <input asp-for="Usuario.Endereco.CEP" class="form-control" col-2 />
+                            <div class="input-group-append">
+                                <span class="input-group-text p-1">
+                                    <i class="fi-xnsrsl-loading d-none" id="cep_loading"></i>
+                                    <i class="fi-xwsuxl-check d-none" id="cep_checked"></i>
+                                    <i class="fi-xwsuxl-times-wide" id="cep_none"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <span class="text-muted d-block" id="endereco">Digite um CEP válido e aguarde.</span>
+                        <span asp-validation-for="Usuario.Endereco.CEP" class="text-danger"></span>
+                        <input type="hidden" asp-for="Usuario.Endereco.Logradouro" value="" />
+                        <input type="hidden" asp-for="Usuario.Endereco.Bairro" value="" />
+                        <input type="hidden" asp-for="Usuario.Endereco.Cidade" value="" />
+                        <input type="hidden" asp-for="Usuario.Endereco.Estado" value="" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Usuario.Endereco.Numero" class="control-label"></label>
+                        <input asp-for="Usuario.Endereco.Numero" class="form-control col-2" />
+                        <span asp-validation-for="Usuario.Endereco.Numero" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Usuario.Endereco.Complemento" class="control-label"></label>
+                        <input asp-for="Usuario.Endereco.Complemento" class="form-control col-4" />
+                        <span asp-validation-for="Usuario.Endereco.Complemento" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Usuario.Endereco.Referencia" class="control-label"></label>
+                        <input asp-for="Usuario.Endereco.Referencia" class="form-control col-4" />
+                        <span asp-validation-for="Usuario.Endereco.Referencia" class="text-danger"></span>
+                    </div>
+                </fieldset>
+                <div class="form-group text-left">
+                    <a asp-page="./Listar" class="btn btn-info">Cancelar</a>
+                    <input type="submit" value="Salvar" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    } 
+    @{
+        await Html.RenderPartialAsync("_CustomConfirm");
+    }
+    @{
+        await Html.RenderPartialAsync("_ConsultaCEP");
+    }
+}

@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <meta charset="utf-8" lang="pt-br" />
+    <title>Clothes Online :: Área Administrativa</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+</head>
+<body>
+    <header class="bg-dark">
+
+        <div class="container">
+            <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
+                <a class="navbar-brand" href="../Pages/Index.cshtml.cs">Clothes Online</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="navbar-nav">
+                        <a class="nav-item nav-link" asp-area="" asp-page="/Admin">Área Administrativa</a>
+                        <a class="nav-item nav-link" asp-area="" asp-page="/ProdutoTestCompleto/Listar">Produtos</a>
+                        <a class="nav-item nav-link" asp-area="" asp-page="/UsuarioTest/Listar">Usuários</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+    </header>
+
+    <section class="container" style="padding-bottom:72px;">
+        <main role="main">
+            @RenderBody()
+        </main>
+    </section>
+
+    <footer class="footer bg-light text-center p-4 fixed-bottom">
+        <div class="container">
+            <span class="text-dark">Copyright &copy; 2020 - Todos os direitos reservados</span>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script defer src="https://friconix.com/cdn/friconix.js"></script>
+
+    @RenderSection("Scripts", required: false)
+
+</body>
+</html>

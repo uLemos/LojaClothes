@@ -1,0 +1,179 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Página Principal";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Bem-vindo à Clothes</h1>
+    <h4>Produtos de qualidade toda semana, enviamos para todo Brasil</h4>
+    <hr />
+</div>
+
+<div class="row">
+
+    <div class="col-12 col-md-6">
+         <form action="/Index" method="get" class="form-inline justify-content-center justify-content-md-start mb-sm-3 mb-md-0" id="formBusca">
+            <input type="text" name="q" id="q" placeholder="Nome do produto..." class="form-control form-control-sm mr-sm-2" />
+            <input type="hidden" name="o" value="0" id="o" />
+            <input type="hidden" name="p" value="0" id="p" />
+            <button class="btn btn-sm btn-success my-2 my-sm-0 form-control form-control-sm" type="submit">Buscar</button>
+        </form>
+    </div>
+
+    <div class="col-12 col-md-5">
+        <div class="d-flex flex-row-reverse justify-content-md-start justify-content-center">
+            <form class="form-inline ml-3 d-inline-block">
+                <select class="form-control custom-select-sm selectOrdem">
+                        <option value="1">Ordenar pelo nome do produto</option>
+                        <option value="2">Ordenar pelo menor preço</option>
+                        <option value="3">Ordenar pelo maior preço</option>
+                    </select>
+            </form>
+            <nav class="d-inline-block">
+                <ul class="pagination pagination-sm my-0">
+                    @for(int i = 1; i <= Model.QuantidadePaginas; i++)
+                    {
+                        if(i==Model.PaginaAtual)
+                        {
+                            <li class="page-item disabled">
+                                <button class="page-link" value="@i">@i</button>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="page-item">
+                                <button class="page-link" value="@i">@i</button>
+                            </li>
+                        }
+                    }
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+<hr class="mt-3"/>
+<div class="row">
+    @if(Model.Produtos.Count > 0){
+        @foreach (var produto in Model.Produtos)
+        {
+             <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 d-flex align-items-lg-stretch">
+                <div class="card text-center bg-light mb-4">
+
+                    <img class="card-img-top" src="/img/produto/@String.Concat(produto.IdProduto.ToString("D6"), ".png")" alt="Imagem de @produto.Nome">
+
+                    <div class="card-header">
+                        R$ @produto.Preco.Value.ToString("F2")
+                    </div>
+
+                    <div class="card-body">
+                        <h5 class="card-title">@produto.Nome</h5>
+                        <p class="card-text">@produto.Descricao</p>
+                    </div>
+
+                    <div class="card-footer">
+                        @if(produto.Estoque > 0)
+                        {
+                            <div><a href="#" class="btn btn-danger">Adicionar ao Carrinho</a></div>
+                            <small class="text-success">Estoque: @produto.Estoque</small>
+                        }
+                        else
+                        {
+                            <div><button class="btn btn-light disable" disabled><small>Aguardando reabastecimento!</small></button></div>
+                            <small class="text-danger"><b>Produto Esgotado</b></small>
+                        }
+                    </div>
+                </div>
+             </div>   
+        }
+    }
+    else
+    {
+        if(Request.QueryString.HasValue)
+        {
+            <div class="col-12">
+                <h1>Não ouve resultados por <b>@Request.Query["termoBusca"]</b> em sua busca!</h1>
+            </div>
+        }
+        else
+        {
+            <div class="col-12">
+                <h1>Não há produtos cadastrados.</h1>
+            </div>
+        }
+    }
+</div>
+<hr class="mt-0"/>
+<div class="row"> 
+
+    <div class="col-12">
+        <div class="d-flex flex-row-reverse justify-content-md-start justify-content-center">
+            <form class="form-inline ml-3 d-inline-block">
+                <select class="form-control custom-select-sm selectOrdem">
+                    <option value="1">Ordenar pelo nome do produto</option>
+                    <option value="2">Ordenar pelo menor preço</option>
+                    <option value="3">Ordenar pelo maior preço</option>
+                </select>
+            </form>
+            <nav class="d-inline-block">
+                <ul class="pagination pagination-sm my-0">
+                    @for (int i = 1; i <= Model.QuantidadePaginas; i++)
+                    {
+                        if (i == Model.PaginaAtual)
+                        {
+                            <li class="page-item disabled">
+                                <button class="page-link" value="@i">@i</button>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="page-item">
+                                <button class="page-link" value="@i">@i</button>
+                            </li>
+                        }
+                    }
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        function getUrlVars(){
+            var vars = [], hash;
+            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+            for(var i = 0; i < hashes.length; i++) {
+                hash = hashes[i].split('=');
+                vars.push(hash[0]);
+                vars[hash[0]] = hash[1];
+            }
+            return vars;
+        }
+
+        $(document).ready(function () {
+            var qs = getUrlVars();
+            if(qs["o"] != null) {
+                $(".selectOrdem").val(qs["o"]);
+                $("#o").val(qs["o"]);
+            }else{
+                $(".selectOrdem").val("1");
+                $("#o").val("1");
+            }
+            if(qs["q"] != null){
+                $("q").val(qs["q"]);
+            }
+        });
+
+        $(".selectOrdem").change(function () {
+            $("#o").val($(this).val());
+            $("#formBusca").submit();
+        });
+
+        $(".page-link").click(function () {
+            $("#p").val($(this).val());
+            $("#formBusca").submit();
+        });
+
+    </script>
+}
